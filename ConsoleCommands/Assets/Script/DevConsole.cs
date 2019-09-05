@@ -9,12 +9,48 @@ namespace Console
     public class DevConsoleDictionaryKey
     {
         string key;
-        public:
-        DevConsoleDictionaryKey(string str)
+        public DevConsoleDictionaryKey(string str)
         {
             key = str;
         }
 
+        public override bool Equals(object obj) {
+            return Equals(obj as DevConsoleDictionaryKey);
+        }
+
+        public bool Equals(DevConsoleDictionaryKey obj)
+        {
+            return obj != null && obj.key.Equals(key);
+        }
+
+        public override int GetHashCode()
+        {
+            return 249886028 + EqualityComparer<string>.Default.GetHashCode(key);
+        }
+
+        public static bool operator ==(DevConsoleDictionaryKey lhs, DevConsoleDictionaryKey rhs)
+        {
+            // Check for null on left side.
+            if (Object.ReferenceEquals(lhs, null))
+            {
+                if (Object.ReferenceEquals(rhs, null))
+                {
+                    // null == null = true.
+                    return true;
+                }
+
+                // Only the left side is null.
+                return false;
+            }
+            // Equals handles case of null on right side.
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(DevConsoleDictionaryKey lhs, DevConsoleDictionaryKey rhs)
+        {
+            
+            return !(lhs == rhs);
+        }
     }
         public class DevConsole : MonoBehaviour
     {
@@ -67,9 +103,10 @@ namespace Console
 
         public static void AddCommandsToConsole(string _name, ConsoleCommand _command)
         {
-            if(!Commands.ContainsKey(_name))
+            DevConsoleDictionaryKey name = new DevConsoleDictionaryKey(_name);
+            if (!Commands.ContainsKey(name))
             {
-                Commands.Add(new DevConsoleDictionaryKey(_name), _command);
+                Commands.Add(name, _command);
             }
         }
 
@@ -101,6 +138,7 @@ namespace Console
         private void ParseInput(string input)
         {
             string[] _input = input.Split(null);
+            DevConsoleDictionaryKey name = new DevConsoleDictionaryKey(_input[0]);
 
             if (_input.Length == 0 || _input == null)
             {
@@ -108,13 +146,13 @@ namespace Console
                 return;
             }
 
-            if (!Commands.ContainsKey(_input[0]))
+            if (!Commands.ContainsKey(name))
             {
                 Debug.LogWarning("Command not recognized.");
             }
             else
             {
-                Commands[_input[0]].RunCommand();
+                Commands[name].RunCommand();
             }
         }
     }
