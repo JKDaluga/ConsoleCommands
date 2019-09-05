@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Console
 {
@@ -12,8 +13,8 @@ namespace Console
 
         [Header("UI Components")]
         public Canvas consoleCanvas;
-        public Text consoleText;
-        public Text inputText;
+        public TextMeshProUGUI consoleText;
+        public TextMeshProUGUI inputText;
         public InputField consoleInput;
 
         private void Awake()
