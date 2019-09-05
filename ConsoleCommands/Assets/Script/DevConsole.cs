@@ -6,10 +6,20 @@ using TMPro;
 
 namespace Console
 {
-    public class DevConsole : MonoBehaviour
+    public class DevConsoleDictionaryKey
+    {
+        string key;
+        public:
+        DevConsoleDictionaryKey(string str)
+        {
+            key = str;
+        }
+
+    }
+        public class DevConsole : MonoBehaviour
     {
         public static DevConsole Instance { get; private set; }
-        public static Dictionary<string, ConsoleCommand> Commands { get; private set; }
+        public static Dictionary<DevConsoleDictionaryKey, ConsoleCommand> Commands { get; private set; }
 
         [Header("UI Components")]
         public Canvas consoleCanvas;
@@ -25,7 +35,7 @@ namespace Console
             }
 
             Instance = this;
-            Commands = new Dictionary<string, ConsoleCommand>();
+            Commands = new Dictionary<DevConsoleDictionaryKey, ConsoleCommand>();
         }
 
         private void Start()
@@ -59,7 +69,7 @@ namespace Console
         {
             if(!Commands.ContainsKey(_name))
             {
-                Commands.Add(_name, _command);
+                Commands.Add(new DevConsoleDictionaryKey(_name), _command);
             }
         }
 
