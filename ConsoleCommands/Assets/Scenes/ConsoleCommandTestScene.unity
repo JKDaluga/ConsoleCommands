@@ -377,7 +377,7 @@ MonoBehaviour:
   consoleCanvas: {fileID: 1716242289}
   consoleText: {fileID: 1755035308}
   inputText: {fileID: 1366064765}
-  consoleInput: {fileID: 0}
+  consoleInput: {fileID: 164367993}
 --- !u!4 &195371870
 Transform:
   m_ObjectHideFlags: 0
@@ -1151,7 +1151,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2016716964}
   m_HandleRect: {fileID: 2016716963}
   m_Direction: 2
-  m_Value: -0.000000029732346
+  m_Value: -0.00000008919704
   m_Size: 0.22733362
   m_NumberOfSteps: 0
   m_OnValueChanged:

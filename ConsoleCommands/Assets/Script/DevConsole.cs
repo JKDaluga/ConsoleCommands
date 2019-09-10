@@ -6,62 +6,16 @@ using TMPro;
 
 namespace Console
 {
-    public class DevConsoleDictionaryKey
-    {
-        string key;
-        public DevConsoleDictionaryKey(string str)
-        {
-            key = str;
-        }
-
-        public override bool Equals(object obj) {
-            return Equals(obj as DevConsoleDictionaryKey);
-        }
-
-        public bool Equals(DevConsoleDictionaryKey obj)
-        {
-            return obj != null && obj.key.Equals(key);
-        }
-
-        public override int GetHashCode()
-        {
-            return 249886028 + EqualityComparer<string>.Default.GetHashCode(key);
-        }
-
-        public static bool operator ==(DevConsoleDictionaryKey lhs, DevConsoleDictionaryKey rhs)
-        {
-            // Check for null on left side.
-            if (Object.ReferenceEquals(lhs, null))
-            {
-                if (Object.ReferenceEquals(rhs, null))
-                {
-                    // null == null = true.
-                    return true;
-                }
-
-                // Only the left side is null.
-                return false;
-            }
-            // Equals handles case of null on right side.
-            return lhs.Equals(rhs);
-        }
-
-        public static bool operator !=(DevConsoleDictionaryKey lhs, DevConsoleDictionaryKey rhs)
-        {
-            
-            return !(lhs == rhs);
-        }
-    }
         public class DevConsole : MonoBehaviour
     {
         public static DevConsole Instance { get; private set; }
-        public static Dictionary<DevConsoleDictionaryKey, ConsoleCommand> Commands { get; private set; }
+        public static Dictionary<string, ConsoleCommand> Commands { get; private set; }
 
         [Header("UI Components")]
         public Canvas consoleCanvas;
         public TextMeshProUGUI consoleText;
         public TextMeshProUGUI inputText;
-        public InputField consoleInput;
+        public TMP_InputField consoleInput;
 
         private void Awake()
         {
@@ -71,7 +25,7 @@ namespace Console
             }
 
             Instance = this;
-            Commands = new Dictionary<DevConsoleDictionaryKey, ConsoleCommand>();
+            Commands = new Dictionary<string, ConsoleCommand>();
         }
 
         private void Start()
@@ -103,7 +57,7 @@ namespace Console
 
         public static void AddCommandsToConsole(string _name, ConsoleCommand _command)
         {
-            DevConsoleDictionaryKey name = new DevConsoleDictionaryKey(_name);
+            var name = _name.Trim().ToLower();
             if (!Commands.ContainsKey(name))
             {
                 Commands.Add(name, _command);
@@ -115,6 +69,10 @@ namespace Console
             if(Input.GetKeyDown(KeyCode.BackQuote))
             {
                 consoleCanvas.gameObject.SetActive(!consoleCanvas.gameObject.activeInHierarchy);
+                if (consoleCanvas.gameObject.activeInHierarchy)
+                {
+                    consoleInput.Select();
+                }
             }
 
             if(consoleCanvas.gameObject.activeInHierarchy)
@@ -138,17 +96,18 @@ namespace Console
         private void ParseInput(string input)
         {
             string[] _input = input.Split(null);
-            DevConsoleDictionaryKey name = new DevConsoleDictionaryKey(_input[0]);
+
+            string name = _input[0].Trim( '\0', (char)(8203));
 
             if (_input.Length == 0 || _input == null)
             {
-                Debug.LogWarning("Command not recognized.");
+                Debug.LogWarning("Command [" + name + "] not recognized.");
                 return;
             }
 
             if (!Commands.ContainsKey(name))
             {
-                Debug.LogWarning("Command not recognized.");
+                Debug.LogWarning("Command [" + name + "] not recognized.");
             }
             else
             {

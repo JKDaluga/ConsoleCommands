@@ -13,10 +13,7 @@ namespace Console
 
         public void AddCommandToConsole()
         {
-            string addMessage = " command has been added to the console.";
-
             DevConsole.AddCommandsToConsole(Command, this);
-            Debug.Log(Name + addMessage);
         }
 
         public abstract void RunCommand();
