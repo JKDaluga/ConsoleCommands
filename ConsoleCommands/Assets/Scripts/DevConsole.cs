@@ -53,6 +53,7 @@ namespace Console
         private void CreateCommands()
         {
             CommandQuit.CreateCommand();
+            RestartCommand.CreateCommand();
         }
 
         public static void AddCommandsToConsole(string _name, ConsoleCommand _command)
